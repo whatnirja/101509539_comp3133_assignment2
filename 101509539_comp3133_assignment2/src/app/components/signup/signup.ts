@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -20,6 +20,10 @@ import { AuthService } from '../../core/services/auth.service';
   templateUrl: './signup.html',
 })
 export class SignupComponent {
+  private fb = inject(FormBuilder);
+  private auth = inject(AuthService);
+  private router = inject(Router);
+
   form = this.fb.group({
     username: ['', [Validators.required, Validators.minLength(3)]],
     email: ['', [Validators.required, Validators.email]],
@@ -29,8 +33,6 @@ export class SignupComponent {
   success = '';
   loading = false;
   hidePassword = true;
-
-  constructor(private fb: FormBuilder, private auth: AuthService, private router: Router) {}
 
   onSubmit() {
     if (this.form.invalid) return;
@@ -42,7 +44,7 @@ export class SignupComponent {
         this.success = 'Account created! Redirecting to login...';
         setTimeout(() => this.router.navigate(['/login']), 1500);
       },
-      error: (err) => {
+      error: (err: any) => {
         this.error = err.message || 'Signup failed';
         this.loading = false;
       }

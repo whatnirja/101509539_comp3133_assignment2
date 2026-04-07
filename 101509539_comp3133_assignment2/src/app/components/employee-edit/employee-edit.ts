@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -24,6 +24,12 @@ import { EmployeeService } from '../../core/services/employee.service';
   templateUrl: './employee-edit.html',
 })
 export class EmployeeEditComponent implements OnInit {
+  private fb = inject(FormBuilder);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private employeeService = inject(EmployeeService);
+  private snackBar = inject(MatSnackBar);
+
   form = this.fb.group({
     first_name: ['', Validators.required],
     last_name: ['', Validators.required],
@@ -39,14 +45,6 @@ export class EmployeeEditComponent implements OnInit {
   loading = false;
   error = '';
 
-  constructor(
-    private fb: FormBuilder,
-    private route: ActivatedRoute,
-    private router: Router,
-    private employeeService: EmployeeService,
-    private snackBar: MatSnackBar
-  ) {}
-
   ngOnInit() {
     this.employeeId = this.route.snapshot.paramMap.get('id')!;
     this.employeeService.getById(this.employeeId).valueChanges.subscribe({
@@ -56,7 +54,7 @@ export class EmployeeEditComponent implements OnInit {
         this.photoPreview = emp.employee_photo || null;
         this.photoBase64 = emp.employee_photo || null;
       },
-      error: (err) => this.error = err.message
+      error: (err: any) => this.error = err.message
     });
   }
 
@@ -85,7 +83,7 @@ export class EmployeeEditComponent implements OnInit {
         this.snackBar.open('Employee updated!', 'Close', { duration: 3000 });
         this.router.navigate(['/employees', this.employeeId]);
       },
-      error: (err) => {
+      error: (err: any) => {
         this.error = err.message;
         this.loading = false;
       }
