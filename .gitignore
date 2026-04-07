@@ -1,0 +1,13 @@
+node_modules/
+dist/
+build/
+.env
+.env.*
+coverage/
+.angular/
+.next/
+.vscode/
+.DS_Store
+
+backend/node_modules/
+frontend/node_modules/git rm -r --cached backend/node_modules frontend/node_modules 2>/dev/null
