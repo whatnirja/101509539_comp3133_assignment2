@@ -33,19 +33,19 @@ export class LoginComponent {
   hidePassword = true;
 
   onSubmit() {
-    if (this.form.invalid) return;
-    this.loading = true;
-    this.error = '';
-    const { username, password } = this.form.value;
-    this.auth.login(username!, password!).subscribe({
-      next: (res: any) => {
-        this.auth.saveToken(res.data.login.token);
-        this.router.navigate(['/employees']);
-      },
-      error: (err: any) => {
-        this.error = err.message || 'Invalid credentials';
-        this.loading = false;
-      }
-    });
-  }
+  if (this.form.invalid) return;
+  this.loading = true;
+  this.error = '';
+  const { username, password } = this.form.value;
+  this.auth.login(username!, password!).subscribe({
+    next: (res: any) => {
+      this.auth.saveToken(res.data.login.token);
+      this.router.navigate(['/employees']);
+    },
+    error: (err: any) => {
+      this.error = err.message || 'Invalid credentials';
+      this.loading = false;
+    }
+  });
+}
 }

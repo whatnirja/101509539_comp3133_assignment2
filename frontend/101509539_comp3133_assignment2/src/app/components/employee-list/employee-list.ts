@@ -44,43 +44,43 @@ export class EmployeeListComponent implements OnInit {
   ngOnInit() { this.loadEmployees(); }
 
   loadEmployees() {
-    this.isSearching = false;
-    this.employeeService.getAll().valueChanges.subscribe({
-      next: (res: any) => this.employees = res.data.getAllEmployees,
-      error: (err) => this.showError(err.message)
-    });
-  }
+  this.isSearching = false;
+  this.employeeService.getAll().valueChanges.subscribe({
+    next: (res: any) => this.employees = res.data.getAllEmployees.employees,
+    error: (err: any) => this.showError(err.message)
+  });
+}
 
-  onSearch() {
-    if (!this.searchDepartment && !this.searchPosition) {
+onSearch() {
+  if (!this.searchDepartment && !this.searchPosition) {
+    this.loadEmployees();
+    return;
+  }
+  this.isSearching = true;
+  this.employeeService.search(
+    this.searchPosition || undefined,
+    this.searchDepartment || undefined
+  ).valueChanges.subscribe({
+    next: (res: any) => this.employees = res.data.searchEmployees.employees,
+    error: (err: any) => this.showError(err.message)
+  });
+}
+
+deleteEmployee(id: string) {
+  if (!confirm('Are you sure you want to delete this employee?')) return;
+  this.employeeService.delete(id).subscribe({
+    next: () => {
+      this.snackBar.open('Employee deleted', 'Close', { duration: 3000 });
       this.loadEmployees();
-      return;
-    }
-    this.isSearching = true;
-    this.employeeService.search(
-      this.searchDepartment || undefined,
-      this.searchPosition || undefined
-    ).valueChanges.subscribe({
-      next: (res: any) => this.employees = res.data.searchEmployeeByDepOrPos,
-      error: (err) => this.showError(err.message)
-    });
-  }
+    },
+    error: (err: any) => this.showError(err.message)
+  });
+}
 
-  clearSearch() {
+   clearSearch() {
     this.searchDepartment = '';
     this.searchPosition = '';
     this.loadEmployees();
-  }
-
-  deleteEmployee(id: string) {
-    if (!confirm('Are you sure you want to delete this employee?')) return;
-    this.employeeService.delete(id).subscribe({
-      next: () => {
-        this.snackBar.open('Employee deleted', 'Close', { duration: 3000 });
-        this.loadEmployees();
-      },
-      error: (err) => this.showError(err.message)
-    });
   }
 
   logout() { this.auth.logout(); }

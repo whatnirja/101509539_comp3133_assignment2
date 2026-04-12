@@ -33,11 +33,13 @@ export class EmployeeAddComponent {
     first_name: ['', Validators.required],
     last_name: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
-    gender: [''],
+    gender: ['', Validators.required],
     salary: [null as number | null, [Validators.required, Validators.min(0)]],
-    position: ['', Validators.required],
+    designation: ['', Validators.required],
     department: ['', Validators.required],
+    date_of_joining: ['', Validators.required],
   });
+
   photoPreview: string | null = null;
   photoBase64: string | null = null;
   loading = false;

@@ -14,7 +14,12 @@ async function start() {
   await connectDB();
 
   const app = express();
-  app.use(cors());
+
+  app.use(cors({
+    origin: 'http://localhost:4200',
+    credentials: true
+  }));
+
   app.use(express.json({ limit: "10mb" }));
 
   const server = new ApolloServer({ typeDefs, resolvers });

@@ -27,16 +27,16 @@ export class EmployeeViewComponent implements OnInit {
   constructor(private route: ActivatedRoute, private employeeService: EmployeeService) {}
 
   ngOnInit() {
-    const id = this.route.snapshot.paramMap.get('id')!;
-    this.employeeService.getById(id).valueChanges.subscribe({
-      next: (res: any) => {
-        this.employee = res.data.searchEmployeeById;
-        this.loading = false;
-      },
-      error: (err) => {
-        this.error = err.message;
-        this.loading = false;
-      }
-    });
-  }
+  const id = this.route.snapshot.paramMap.get('id')!;
+  this.employeeService.getById(id).valueChanges.subscribe({
+    next: (res: any) => {
+      this.employee = res.data.getEmployeeByEid.employee;
+      this.loading = false;
+    },
+    error: (err: any) => {
+      this.error = err.message;
+      this.loading = false;
+    }
+  });
+}
 }

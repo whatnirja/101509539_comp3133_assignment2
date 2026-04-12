@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import {
   GET_EMPLOYEES, GET_EMPLOYEE, ADD_EMPLOYEE,
@@ -7,44 +7,45 @@ import {
 
 @Injectable({ providedIn: 'root' })
 export class EmployeeService {
-  constructor(private apollo: Apollo) {}
+  private apollo = inject(Apollo);
 
   getAll() {
-    return this.apollo.watchQuery<any>({ query: GET_EMPLOYEES });
+    return this.apollo.watchQuery<any>({ query: GET_EMPLOYEES, fetchPolicy: 'network-only' });
   }
 
-  getById(id: string) {
-    return this.apollo.watchQuery<any>({ query: GET_EMPLOYEE, variables: { id } });
+  getById(eid: string) {
+    return this.apollo.watchQuery<any>({ query: GET_EMPLOYEE, variables: { eid } });
   }
 
-  add(emp: any) {
+  add(input: any) {
     return this.apollo.mutate({
       mutation: ADD_EMPLOYEE,
-      variables: emp,
+      variables: { input },
       refetchQueries: [{ query: GET_EMPLOYEES }]
     });
   }
 
-  update(id: string, emp: any) {
+  update(eid: string, input: any) {
     return this.apollo.mutate({
       mutation: UPDATE_EMPLOYEE,
-      variables: { id, ...emp },
+      variables: { eid, input },
       refetchQueries: [{ query: GET_EMPLOYEES }]
     });
   }
 
-  delete(id: string) {
+  delete(eid: string) {
     return this.apollo.mutate({
       mutation: DELETE_EMPLOYEE,
-      variables: { id },
+      variables: { eid },
       refetchQueries: [{ query: GET_EMPLOYEES }]
     });
   }
 
-  search(department?: string, position?: string) {
+  search(designation?: string, department?: string) {
     return this.apollo.watchQuery<any>({
       query: SEARCH_EMPLOYEES,
-      variables: { department, position }
+      variables: { designation, department },
+      fetchPolicy: 'network-only'
     });
   }
 }

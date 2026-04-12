@@ -34,11 +34,13 @@ export class EmployeeEditComponent implements OnInit {
     first_name: ['', Validators.required],
     last_name: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
-    gender: [''],
+    gender: ['', Validators.required],
     salary: [null as number | null, [Validators.required, Validators.min(0)]],
-    position: ['', Validators.required],
+    designation: ['', Validators.required],
     department: ['', Validators.required],
+    date_of_joining: ['', Validators.required],
   });
+
   employeeId = '';
   photoPreview: string | null = null;
   photoBase64: string | null = null;
@@ -49,8 +51,13 @@ export class EmployeeEditComponent implements OnInit {
     this.employeeId = this.route.snapshot.paramMap.get('id')!;
     this.employeeService.getById(this.employeeId).valueChanges.subscribe({
       next: (res: any) => {
-        const emp = res.data.searchEmployeeById;
-        this.form.patchValue(emp);
+        const emp = res.data.getEmployeeByEid.employee;
+        this.form.patchValue({
+          ...emp,
+          date_of_joining: emp.date_of_joining
+            ? new Date(emp.date_of_joining).toISOString().split('T')[0]
+            : ''
+        });
         this.photoPreview = emp.employee_photo || null;
         this.photoBase64 = emp.employee_photo || null;
       },

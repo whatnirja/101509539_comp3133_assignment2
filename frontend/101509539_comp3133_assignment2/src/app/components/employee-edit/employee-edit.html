@@ -48,10 +48,18 @@
           </mat-form-field>
 
           <mat-form-field appearance="outline">
-            <mat-label>Position</mat-label>
-            <input matInput formControlName="position" />
-            @if (form.get('position')?.hasError('required') && form.get('position')?.touched) {
-              <mat-error>Position is required</mat-error>
+            <mat-label>Designation</mat-label>
+            <input matInput formControlName="designation" />
+            @if (form.get('designation')?.hasError('required') && form.get('designation')?.touched) {
+              <mat-error>Designation is required</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Date of Joining</mat-label>
+            <input matInput formControlName="date_of_joining" type="date" />
+            @if (form.get('date_of_joining')?.hasError('required') && form.get('date_of_joining')?.touched) {
+              <mat-error>Date of joining is required</mat-error>
             }
           </mat-form-field>
 

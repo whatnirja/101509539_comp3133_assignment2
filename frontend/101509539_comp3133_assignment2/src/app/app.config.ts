@@ -20,7 +20,7 @@ export const appConfig: ApplicationConfig = {
       useFactory(httpLink: HttpLink) {
         return {
           cache: new InMemoryCache(),
-          link: httpLink.create({ uri: 'http://localhost:5000/graphql' }),
+          link: httpLink.create({ uri: 'http://localhost:8081/graphql' }),
         };
       },
       deps: [HttpLink],

@@ -1,23 +1,24 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import { Router } from '@angular/router';
 import { LOGIN, SIGNUP } from '../../graphql/auth.queries';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  constructor(private apollo: Apollo, private router: Router) {}
+  private apollo = inject(Apollo);
+  private router = inject(Router);
 
-  login(username: string, password: string) {
-    return this.apollo.mutate({
-      mutation: LOGIN,
-      variables: { username, password }
+  login(username_or_email: string, password: string) {
+    return this.apollo.query({
+      query: LOGIN,
+      variables: { input: { username_or_email, password } }
     });
   }
 
   signup(username: string, email: string, password: string) {
     return this.apollo.mutate({
       mutation: SIGNUP,
-      variables: { username, email, password }
+      variables: { input: { username, email, password } }
     });
   }
 
