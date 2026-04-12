@@ -20,7 +20,7 @@ export const appConfig: ApplicationConfig = {
       useFactory(httpLink: HttpLink) {
         return {
           cache: new InMemoryCache(),
-          link: httpLink.create({ uri: 'http://localhost:8081/graphql' }),
+          link: httpLink.create({ uri: 'https://comp3133-backend-jbd1.onrender.com/graphql' }),
         };
       },
       deps: [HttpLink],
