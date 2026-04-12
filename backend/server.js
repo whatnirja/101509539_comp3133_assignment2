@@ -16,9 +16,12 @@ async function start() {
   const app = express();
 
   app.use(cors({
-    origin: 'http://localhost:4200',
-    credentials: true
-  }));
+  origin: [
+    'http://localhost:4200',
+    'https://101509539-comp3133-assignment2.vercel.app'
+  ],
+  credentials: true
+}));
 
   app.use(express.json({ limit: "10mb" }));
 
