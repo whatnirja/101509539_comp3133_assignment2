@@ -1,113 +1,164 @@
-<mat-toolbar color="primary">
-  <span>Employee Manager</span>
-  <span class="spacer"></span>
-  <button mat-raised-button routerLink="/employees/add">
-    <mat-icon>add</mat-icon> Add Employee
-  </button>
-  <button mat-icon-button (click)="logout()" matTooltip="Logout" style="margin-left:8px">
-    <mat-icon>logout</mat-icon>
-  </button>
-</mat-toolbar>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <mat-icon>people</mat-icon>
+      <span>EmpManager</span>
+    </div>
+    <nav class="sidebar-nav">
+      <a class="nav-item active">
+        <mat-icon>grid_view</mat-icon>
+        <span>Dashboard</span>
+      </a>
+      <a class="nav-item" routerLink="/employees/add">
+        <mat-icon>person_add</mat-icon>
+        <span>Add Employee</span>
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="nav-item logout-btn" (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        <span>Logout</span>
+      </button>
+    </div>
+  </aside>
 
-<div class="container">
+  <main class="main">
 
-  <mat-card class="search-card">
-    <mat-card-content>
-      <div class="search-row">
-        <mat-form-field appearance="outline">
-          <mat-label>Search by Department</mat-label>
-          <input matInput [(ngModel)]="searchDepartment" placeholder="e.g. Engineering" />
-          <mat-icon matPrefix>business</mat-icon>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>Search by Position</mat-label>
-          <input matInput [(ngModel)]="searchPosition" placeholder="e.g. Manager" />
-          <mat-icon matPrefix>work</mat-icon>
-        </mat-form-field>
-
-        <button mat-raised-button color="primary" (click)="onSearch()">
-          <mat-icon>search</mat-icon> Search
-        </button>
-        @if (isSearching) {
-          <button mat-stroked-button (click)="clearSearch()">
-            <mat-icon>clear</mat-icon> Clear
-          </button>
-        }
+    <div class="page-header">
+      <div>
+        <h1>Employee Directory</h1>
+        <p class="subtitle">Manage your team members</p>
       </div>
-    </mat-card-content>
-  </mat-card>
+      <button mat-raised-button color="primary" routerLink="/employees/add" class="add-btn">
+        <mat-icon>add</mat-icon> Add Employee
+      </button>
+    </div>
 
-  <mat-card>
-    <mat-card-content>
-      <table mat-table [dataSource]="employees" class="full-width">
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-icon blue"><mat-icon>people</mat-icon></div>
+        <div>
+          <p class="stat-label">Total Employees</p>
+          <h2 class="stat-value">{{ employees.length }}</h2>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon green"><mat-icon>business</mat-icon></div>
+        <div>
+          <p class="stat-label">Departments</p>
+          <h2 class="stat-value">{{ getDepartmentCount() }}</h2>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon purple"><mat-icon>work</mat-icon></div>
+        <div>
+          <p class="stat-label">Designations</p>
+          <h2 class="stat-value">{{ getDesignationCount() }}</h2>
+        </div>
+      </div>
+    </div>
 
-        <ng-container matColumnDef="photo">
-          <th mat-header-cell *matHeaderCellDef>Photo</th>
-          <td mat-cell *matCellDef="let emp">
-            <img [src]="emp.employee_photo || 'assets/default-avatar.png'"
-              class="avatar" alt="photo" />
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef>Name</th>
-          <td mat-cell *matCellDef="let emp">{{ emp.first_name }} {{ emp.last_name }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="email">
-          <th mat-header-cell *matHeaderCellDef>Email</th>
-          <td mat-cell *matCellDef="let emp">{{ emp.email }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="position">
-          <th mat-header-cell *matHeaderCellDef>Designation</th>
-          <td mat-cell *matCellDef="let emp">{{ emp.designation }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="department">
-          <th mat-header-cell *matHeaderCellDef>Department</th>
-          <td mat-cell *matCellDef="let emp">{{ emp.department }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="salary">
-          <th mat-header-cell *matHeaderCellDef>Salary</th>
-          <td mat-cell *matCellDef="let emp">{{ emp.salary | currency }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="actions">
-          <th mat-header-cell *matHeaderCellDef>Actions</th>
-          <td mat-cell *matCellDef="let emp">
-            <button mat-icon-button color="primary" [routerLink]="['/employees', emp._id]" matTooltip="View">
-              <mat-icon>visibility</mat-icon>
-            </button>
-            <button mat-icon-button color="accent" [routerLink]="['/employees', emp._id, 'edit']" matTooltip="Edit">
-              <mat-icon>edit</mat-icon>
-            </button>
-            <button mat-icon-button color="warn" (click)="deleteEmployee(emp._id)" matTooltip="Delete">
-              <mat-icon>delete</mat-icon>
-            </button>
-          </td>
-        </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      </table>
-
-      @if (employees.length === 0) {
-        <p class="no-data">No employees found.</p>
+    <div class="search-bar">
+      <div class="search-input-wrapper">
+        <mat-icon class="search-icon">search</mat-icon>
+        <input
+          class="search-input"
+          [(ngModel)]="searchDepartment"
+          placeholder="Search by department..."
+        />
+      </div>
+      <div class="search-input-wrapper">
+        <mat-icon class="search-icon">work</mat-icon>
+        <input
+          class="search-input"
+          [(ngModel)]="searchPosition"
+          placeholder="Search by designation..."
+        />
+      </div>
+      <button class="search-btn" (click)="onSearch()">Search</button>
+      @if (isSearching) {
+        <button class="clear-btn" (click)="clearSearch()">Clear</button>
       }
-    </mat-card-content>
-  </mat-card>
-</div>
+    </div>
 
-<style>
-  .spacer { flex: 1 1 auto; }
-  .container { padding: 24px; max-width: 1200px; margin: 0 auto; }
-  .search-card { margin-bottom: 20px; }
-  .search-row { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
-  .search-row mat-form-field { flex: 1; min-width: 200px; }
-  .full-width { width: 100%; }
-  .avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
-  .no-data { text-align: center; padding: 40px; color: #999; }
-</style>
+    <div class="table-card">
+      @if (loading) {
+        <div class="loading-state">
+          <mat-icon>hourglass_empty</mat-icon>
+          <p>Loading employees...</p>
+        </div>
+      } @else if (employees.length === 0) {
+        <div class="empty-state">
+          <mat-icon>people_outline</mat-icon>
+          <p>No employees found</p>
+          <button mat-raised-button color="primary" routerLink="/employees/add">Add First Employee</button>
+        </div>
+      } @else {
+        <table mat-table [dataSource]="employees" class="emp-table">
+
+          <ng-container matColumnDef="photo">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let emp">
+              <img [src]="emp.employee_photo || 'assets/default-avatar.png'"
+                class="avatar" alt="avatar" />
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef>Name</th>
+            <td mat-cell *matCellDef="let emp">
+              <span class="emp-name">{{ emp.first_name }} {{ emp.last_name }}</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef>Email</th>
+            <td mat-cell *matCellDef="let emp">{{ emp.email }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="designation">
+            <th mat-header-cell *matHeaderCellDef>Designation</th>
+            <td mat-cell *matCellDef="let emp">
+              <span class="badge badge-blue">{{ emp.designation }}</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="department">
+            <th mat-header-cell *matHeaderCellDef>Department</th>
+            <td mat-cell *matCellDef="let emp">
+              <span class="badge badge-purple">{{ emp.department }}</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="salary">
+            <th mat-header-cell *matHeaderCellDef>Salary</th>
+            <td mat-cell *matCellDef="let emp">
+              <span class="salary">{{ emp.salary | currency }}</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
+            <td mat-cell *matCellDef="let emp">
+              <div class="action-btns">
+                <button class="icon-btn view" [routerLink]="['/employees', emp._id]" matTooltip="View">
+                  <mat-icon>visibility</mat-icon>
+                </button>
+                <button class="icon-btn edit" [routerLink]="['/employees', emp._id, 'edit']" matTooltip="Edit">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button class="icon-btn delete" (click)="deleteEmployee(emp._id)" matTooltip="Delete">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="table-row"></tr>
+        </table>
+      }
+    </div>
+
+  </main>
+</div>

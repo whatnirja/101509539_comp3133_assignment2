@@ -1,132 +1,145 @@
-<mat-toolbar color="primary">
-  <button mat-icon-button routerLink="/employees">
-    <mat-icon>arrow_back</mat-icon>
-  </button>
-  <span>Add New Employee</span>
-</mat-toolbar>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <mat-icon>people</mat-icon>
+      <span>EmpManager</span>
+    </div>
+    <nav class="sidebar-nav">
+      <a class="nav-item" routerLink="/employees">
+        <mat-icon>grid_view</mat-icon>
+        <span>Dashboard</span>
+      </a>
+      <a class="nav-item active">
+        <mat-icon>person_add</mat-icon>
+        <span>Add Employee</span>
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="nav-item logout-btn" (click)="onCancel()">
+        <mat-icon>logout</mat-icon>
+        <span>Logout</span>
+      </button>
+    </div>
+  </aside>
 
-<div class="container">
-  <mat-card>
-    <mat-card-content>
-      <form [formGroup]="form" (ngSubmit)="onSubmit()">
-        <div class="form-grid">
+  <main class="main">
+    <div class="page-header">
+      <div>
+        <h1>Add Employee</h1>
+        <p class="subtitle">Fill in the details to add a new team member</p>
+      </div>
+      <a routerLink="/employees" class="back-btn">
+        <mat-icon>arrow_back</mat-icon> Back
+      </a>
+    </div>
 
-          <mat-form-field appearance="outline">
-            <mat-label>First Name</mat-label>
-            <input matInput formControlName="first_name" />
-            @if (form.get('first_name')?.hasError('required') && form.get('first_name')?.touched) {
-              <mat-error>First name is required</mat-error>
-            }
-          </mat-form-field>
+    <div class="form-page">
+      <div class="form-card">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+          <div class="form-grid">
 
-          <mat-form-field appearance="outline">
-            <mat-label>Last Name</mat-label>
-            <input matInput formControlName="last_name" />
-            @if (form.get('last_name')?.hasError('required') && form.get('last_name')?.touched) {
-              <mat-error>Last name is required</mat-error>
-            }
-          </mat-form-field>
+            <div class="form-field" [class.has-error]="form.get('first_name')?.invalid && form.get('first_name')?.touched">
+              <label>First Name *</label>
+              <input formControlName="first_name" placeholder="Nirja" />
+              @if (form.get('first_name')?.invalid && form.get('first_name')?.touched) {
+                <span class="field-error">First name is required</span>
+              }
+            </div>
 
-          <mat-form-field appearance="outline">
-            <mat-label>Email</mat-label>
-            <input matInput formControlName="email" type="email" />
-            @if (form.get('email')?.hasError('required') && form.get('email')?.touched) {
-              <mat-error>Email is required</mat-error>
-            }
-            @if (form.get('email')?.hasError('email')) {
-              <mat-error>Enter a valid email</mat-error>
-            }
-          </mat-form-field>
+            <div class="form-field" [class.has-error]="form.get('last_name')?.invalid && form.get('last_name')?.touched">
+              <label>Last Name *</label>
+              <input formControlName="last_name" placeholder="Dabhi" />
+              @if (form.get('last_name')?.invalid && form.get('last_name')?.touched) {
+                <span class="field-error">Last name is required</span>
+              }
+            </div>
 
-          <mat-form-field appearance="outline">
-            <mat-label>Gender</mat-label>
-            <mat-select formControlName="gender">
-              <mat-option value="Male">Male</mat-option>
-              <mat-option value="Female">Female</mat-option>
-              <mat-option value="Other">Other</mat-option>
-            </mat-select>
-          </mat-form-field>
+            <div class="form-field" [class.has-error]="form.get('email')?.invalid && form.get('email')?.touched">
+              <label>Email *</label>
+              <input formControlName="email" type="email" placeholder="nirja@company.com" />
+              @if (form.get('email')?.hasError('required') && form.get('email')?.touched) {
+                <span class="field-error">Email is required</span>
+              }
+              @if (form.get('email')?.hasError('email')) {
+                <span class="field-error">Enter a valid email</span>
+              }
+            </div>
 
-          <mat-form-field appearance="outline">
-            <mat-label>Designation</mat-label>
-            <input matInput formControlName="designation" />
-            @if (form.get('designation')?.hasError('required') && form.get('designation')?.touched) {
-              <mat-error>Designation is required</mat-error>
-            }
-          </mat-form-field>
+            <div class="form-field" [class.has-error]="form.get('gender')?.invalid && form.get('gender')?.touched">
+              <label>Gender *</label>
+              <select formControlName="gender">
+                <option value="">Select gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+              @if (form.get('gender')?.invalid && form.get('gender')?.touched) {
+                <span class="field-error">Gender is required</span>
+              }
+            </div>
 
-          <mat-form-field appearance="outline">
-            <mat-label>Date of Joining</mat-label>
-            <input matInput formControlName="date_of_joining" type="date" />
-            @if (form.get('date_of_joining')?.hasError('required') && form.get('date_of_joining')?.touched) {
-              <mat-error>Date of joining is required</mat-error>
-            }
-          </mat-form-field>
+            <div class="form-field" [class.has-error]="form.get('designation')?.invalid && form.get('designation')?.touched">
+              <label>Designation *</label>
+              <input formControlName="designation" placeholder="e.g. Software Engineer" />
+              @if (form.get('designation')?.invalid && form.get('designation')?.touched) {
+                <span class="field-error">Designation is required</span>
+              }
+            </div>
 
-          <mat-form-field appearance="outline">
-            <mat-label>Department</mat-label>
-            <input matInput formControlName="department" />
-            @if (form.get('department')?.hasError('required') && form.get('department')?.touched) {
-              <mat-error>Department is required</mat-error>
-            }
-          </mat-form-field>
+            <div class="form-field" [class.has-error]="form.get('department')?.invalid && form.get('department')?.touched">
+              <label>Department *</label>
+              <input formControlName="department" placeholder="e.g. Engineering" />
+              @if (form.get('department')?.invalid && form.get('department')?.touched) {
+                <span class="field-error">Department is required</span>
+              }
+            </div>
 
-          <mat-form-field appearance="outline">
-            <mat-label>Salary</mat-label>
-            <input matInput formControlName="salary" type="number" />
-            <mat-icon matPrefix>attach_money</mat-icon>
-            @if (form.get('salary')?.hasError('required') && form.get('salary')?.touched) {
-              <mat-error>Salary is required</mat-error>
-            }
-            @if (form.get('salary')?.hasError('min')) {
-              <mat-error>Salary must be positive</mat-error>
-            }
-          </mat-form-field>
+            <div class="form-field" [class.has-error]="form.get('salary')?.invalid && form.get('salary')?.touched">
+              <label>Salary *</label>
+              <input formControlName="salary" type="number" placeholder="50000" />
+              @if (form.get('salary')?.hasError('required') && form.get('salary')?.touched) {
+                <span class="field-error">Salary is required</span>
+              }
+              @if (form.get('salary')?.hasError('min')) {
+                <span class="field-error">Salary must be positive</span>
+              }
+            </div>
 
-        </div>
+            <div class="form-field" [class.has-error]="form.get('date_of_joining')?.invalid && form.get('date_of_joining')?.touched">
+              <label>Date of Joining *</label>
+              <input formControlName="date_of_joining" type="date" />
+              @if (form.get('date_of_joining')?.invalid && form.get('date_of_joining')?.touched) {
+                <span class="field-error">Date of joining is required</span>
+              }
+            </div>
 
-        <div class="photo-section">
-          <h3>Profile Photo</h3>
-          <div class="photo-upload">
-            @if (photoPreview) {
-              <img [src]="photoPreview" class="photo-preview" alt="preview" />
-            } @else {
-              <div class="photo-placeholder">
-                <mat-icon>add_a_photo</mat-icon>
-                <span>No photo selected</span>
+            <div class="photo-section">
+              <h3>Profile Photo</h3>
+              <div class="photo-upload">
+                @if (photoPreview) {
+                  <img [src]="photoPreview" class="photo-preview" alt="preview" />
+                } @else {
+                  <div class="photo-placeholder"><mat-icon>person</mat-icon></div>
+                }
+                <input type="file" accept="image/*" #fileInput style="display:none" (change)="onPhotoSelected($event)" />
+                <button type="button" class="upload-btn" (click)="fileInput.click()">
+                  <mat-icon>upload</mat-icon> Upload Photo
+                </button>
               </div>
-            }
-            <input type="file" accept="image/*" #fileInput style="display:none"
-              (change)="onPhotoSelected($event)" />
-            <button mat-stroked-button type="button" (click)="fileInput.click()">
-              <mat-icon>upload</mat-icon> Upload Photo
+            </div>
+
+          </div>
+
+          @if (error) { <p class="form-error">{{ error }}</p> }
+
+          <div class="form-actions">
+            <button type="button" class="cancel-btn" routerLink="/employees">Cancel</button>
+            <button type="submit" class="primary-btn" [disabled]="loading">
+              {{ loading ? 'Saving...' : 'Add Employee' }}
             </button>
           </div>
-        </div>
-
-        @if (error) { <p class="error-msg">{{ error }}</p> }
-
-        <div class="actions">
-          <button mat-stroked-button type="button" routerLink="/employees">Cancel</button>
-          <button mat-raised-button color="primary" type="submit" [disabled]="loading">
-            {{ loading ? 'Saving...' : 'Add Employee' }}
-          </button>
-        </div>
-      </form>
-    </mat-card-content>
-  </mat-card>
+        </form>
+      </div>
+    </div>
+  </main>
 </div>
-
-<style>
-  .container { padding: 24px; max-width: 800px; margin: 0 auto; }
-  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  .photo-section { margin: 20px 0; }
-  .photo-upload { display: flex; align-items: center; gap: 20px; }
-  .photo-preview { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 2px solid #ddd; }
-  .photo-placeholder { width: 100px; height: 100px; border-radius: 50%; background: #f5f5f5;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    border: 2px dashed #ccc; color: #999; font-size: 12px; }
-  .actions { display: flex; gap: 12px; justify-content: flex-end; margin-top: 24px; }
-  .error-msg { color: #f44336; }
-  @media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } }
-</style>

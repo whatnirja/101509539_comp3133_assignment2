@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -15,6 +15,7 @@ import { EmployeeService } from '../../core/services/employee.service';
 @Component({
   selector: 'app-employee-add',
   standalone: true,
+  encapsulation: ViewEncapsulation.None,
   imports: [
     CommonModule, ReactiveFormsModule, RouterLink,
     MatFormFieldModule, MatInputModule, MatButtonModule,
@@ -76,4 +77,6 @@ export class EmployeeAddComponent {
       }
     });
   }
+
+  onCancel() { this.router.navigate(['/employees']); }
 }

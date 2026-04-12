@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
@@ -12,6 +12,7 @@ import { EmployeeService } from '../../core/services/employee.service';
 @Component({
   selector: 'app-employee-view',
   standalone: true,
+  encapsulation: ViewEncapsulation.None,
   imports: [
     CommonModule, RouterLink,
     MatCardModule, MatButtonModule, MatIconModule,

@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -15,6 +15,8 @@ import { EmployeeService } from '../../core/services/employee.service';
 @Component({
   selector: 'app-employee-edit',
   standalone: true,
+  encapsulation: ViewEncapsulation.None,
+  
   imports: [
     CommonModule, ReactiveFormsModule, RouterLink,
     MatFormFieldModule, MatInputModule, MatButtonModule,
@@ -23,6 +25,7 @@ import { EmployeeService } from '../../core/services/employee.service';
   ],
   templateUrl: './employee-edit.html',
 })
+
 export class EmployeeEditComponent implements OnInit {
   private fb = inject(FormBuilder);
   private route = inject(ActivatedRoute);
