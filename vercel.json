@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "frontend/101509539_comp3133_assignment2/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist/101509539_comp3133_assignment2/browser"
+      }
+    }
+  ],
+  "routes": [
+    { "handle": "filesystem" },
+    { "src": "/(.*)", "dest": "/index.html" }
+  ]
+}
